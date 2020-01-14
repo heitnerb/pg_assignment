@@ -1,17 +1,22 @@
 #This is a program to make the user guess the number of files in the current folder.
 
 echo "Guess the number of files in the current directory, please!"
-read response
+read response 
 
 function wrong_answer {
-	echo "Yous guess is too $1, plase try again!"
+	echo "Your guess is too $1, plase try again!"
 }
 
-good_number=$(ls | wc -l)
+good_number=$(ls -A | wc -l)
 
-while [[ $good_number -ne $response ]]
+while ! [[ $good_number -eq $response ]] 2> /dev/null
 do
-	if [[ $good_number -gt $response ]]
+	if ! [[ $response =~ ^[0-9]+$ ]]
+	then
+		echo "Please enter a valid number!"
+		read response
+
+	elif [[ $good_number -gt $response ]]
 	then
 		wrong_answer low
 		read response
